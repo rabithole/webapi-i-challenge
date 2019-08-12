@@ -1,11 +1,11 @@
 
 
-const express = require('express');
+const express = require('express'); // Imports the Express package...
 
-const server = express();
+const server = express(); // This creates a server...
 
-server.get('/', (req, res) => {
-  res.send('Hello World');
+server.get('/', (req, res) => { // This is a route handler...
+  res.send('Hello World' + ' ' + 'Give me a break!');
 });
 
 server.get('/hobbits', (req, res) => {
