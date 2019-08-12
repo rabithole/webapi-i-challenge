@@ -1,13 +1,3 @@
-<<<<<<< HEAD
-
-
-const express = require('express'); // Imports the Express package...
-
-const server = express(); // This creates a server...
-
-server.get('/', (req, res) => { // This is a route handler...
-  res.send('Hello World' + ' ' + 'Give me a break!');
-=======
 const express = require('express');
 
 const users = require('./data/db.js');
@@ -35,7 +25,6 @@ server.get('/api/users', (req, res) => { // This is a route handler...
     res.status(500).json({ 
       message: 'error getting the list of users' })
   })
->>>>>>> bebae5ebf23041d3797af913fb4722e295fdf204
 });
 
 server.get('/hobbits', (req, res) => {
@@ -60,14 +49,18 @@ server.post('/api/users', (req, res) => {
   // Can add validating here. 
   users.add(newUser)
     .then(users => {
-      console.log('User Id', users.bio)
       if(user.name && user.bio) {
+              console.log('User Id', users.bio)
+
         res.status(201).json(users);
       } else {
+        console.log('else')
         res.status(404).json({
           message: 'Invalid user info'
         });
       }
+
+      // res.status(201).json(users);
   })
   .catch(error => {
     res.status(500).json({
@@ -75,6 +68,29 @@ server.post('/api/users', (req, res) => {
       message: 'Idiot, you failed to create new user'
     });
   });
+});
+
+// DELETE /hubs/:id
+server.delete('/api/users/:id', (req, res) => {
+  const { id } = req.params;
+  // const id = req.params.id This line does the same as the line above it. 
+  users.remove(id)
+    .then(users => {
+      // Send error if the id does not exist.
+      if(users) {
+        res.json(users);
+      } else {
+        res.status(404).json({
+          message: 'invalid hub id'
+        });
+      }
+    })
+    .catch(error => {
+      res.status(500).json({
+        error: error,
+        message: 'failed to destroy hub'
+      });
+    });
 });
 
 server.listen(8000, () => console.log('API running on port 8000'));
