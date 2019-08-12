@@ -1,6 +1,6 @@
 const express = require('express');
 
-const Users = require('./data/db.js');
+const users = require('./data/db.js');
 
 const server = express();
 
@@ -14,7 +14,7 @@ server.use(express.json());
 server.get('/api/users', (req, res) => { // This is a route handler...
   // res.send('Hello World' + ' ' + 'Give me a break!');
   // Hubs.find() returns a promise. 
-  Users.find() // Accesses the hubs data from the database...
+  users.find() // Accesses the hubs data from the database...
     .then(users => {
       console.log('Users', users);
       // .json will covert the data passed to json...
@@ -27,34 +27,41 @@ server.get('/api/users', (req, res) => { // This is a route handler...
   })
 });
 
-// server.get('/Users', (req, res) => {
-//   const hobbits = [
-//     {
-//       id: 1,
-//       name: 'Samwise Gamgee',
-//     },
-//     {
-//       id: 2,
-//       name: 'Frodo Baggins',
-//     },
-//   ];
+server.get('/hobbits', (req, res) => {
+  const hobbits = [
+    {
+      id: 1,
+      name: 'Samwise Gamgee',
+    },
+    {
+      id: 2,
+      name: 'Frodo Baggins',
+    },
+  ];
 
-//   res.status(200).json(hobbits);
-// });
+  res.status(200).json(hobbits);
+});
 
 // POST /
 server.post('/api/users', (req, res) => {
   const newUser = req.body; // Object sent from front end aka client. Postman is used for testing as the client. 
   console.log('new user', newUser);
   // Can add validating here. 
-  Users.add(newUser)
-    .then(user => {
-      res.status(201).json(user);
+  users.add(newUser)
+    .then(users => {
+      console.log('User Id', users.bio)
+      if(user.name && user.bio) {
+        res.status(201).json(users);
+      } else {
+        res.status(404).json({
+          message: 'Invalid user info'
+        });
+      }
   })
   .catch(error => {
     res.status(500).json({
       error: error,
-      message: 'failed to create new user'
+      message: 'Idiot, you failed to create new user'
     });
   });
 });

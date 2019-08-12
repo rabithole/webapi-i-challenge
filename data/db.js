@@ -8,6 +8,7 @@ module.exports = {
   insert,
   update,
   remove,
+  add
 };
 
 function find() {
@@ -18,6 +19,12 @@ function findById(id) {
   return db('users')
     .where({ id: Number(id) })
     .first();
+}
+
+async function add(user) {
+  const [id] = await db('users').insert(user);
+
+  return findById(id);
 }
 
 function insert(user) {
